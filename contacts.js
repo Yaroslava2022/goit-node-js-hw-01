@@ -3,9 +3,11 @@ import path from "path";
 import { nanoid } from "nanoid";
 
 const contactsPath = path.resolve("db", "contacts.json");
-export const listContacts = async() => {
+
+  export const listContacts = async() => {
    const data = await fs.readFile(contactsPath)
-  return JSON.parse(data)};
+  return JSON.parse(data)
+};
 
   export const getContactById = async(id) => {
     const contacts = await listContacts();
