@@ -1,9 +1,34 @@
 import fs from "fs/promises";
+import path from "path";
+import { nanoid } from "nanoid";
 
-const listContacts = async() => {
-   const data = await fs.readFile("./db/contacts.json", "utf-8")
-  return JSON.parse(data)}
+const contactsPath = path.resolve("db", "contacts.json");
+export const listContacts = async() => {
+   const data = await fs.readFile(contactsPath)
+  return JSON.parse(data)};
 
-  module.exports= {
-    listContacts
+  export const getContactById = async(id) => {
+    const contacts = await listContacts();
+    const result = contacts.find( item => item.id === id);
+    return result || null;
+  }
+  
+  export const addContact = async({name, email, phone}) => {
+    const contacts = await listContacts();
+    const newContact = {
+      id: nanoid(),
+      name,
+      email,
+      phone
+    }
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
+  }
+
+
+  export default {
+    listContacts,
+    getContactById,
+    addContact,
 }
